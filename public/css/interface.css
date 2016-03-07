@@ -2,5 +2,13 @@
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
   -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */ 
+  user-select: none;          /* Likely future */
+}
+.topButton, .bottomButton {
+  display: flex;
+  justify-content: center;
+}
+button {
+  width: 50%;
+  height: 25vh;
 }
