@@ -115,14 +115,14 @@ var ButtonInterface = React.createClass({
     return (
       <div className="allButtons">
         <div className="topButton">
-          <button onTouchEnd={this.handleRelease} onTouchStart={this.handlePress.bind(this, 'up')} onMouseUp={this.handleRelease} onMouseDown={this.handlePress.bind(this, 'left')}>up</button>
+          <button onTouchEnd={this.handleRelease.bind(this, 'up')} onTouchStart={this.handlePress.bind(this, 'up')} onMouseUp={this.handleRelease.bind(this, 'up')} onMouseDown={this.handlePress.bind(this, 'up')}>up</button>
         </div>
         <div className="sideButtons">
-          <button onTouchEnd={this.handleRelease} onTouchStart={this.handlePress.bind(this, 'left')} onMouseUp={this.handleRelease} onMouseDown={this.handlePress.bind(this, 'left')}>left</button>
-          <button onTouchEnd={this.handleRelease} onTouchStart={this.handlePress.bind(this, 'right')} onMouseUp={this.handleRelease} onMouseDown={this.handlePress.bind(this, 'right')}>right</button>
+          <button onTouchEnd={this.handleRelease.bind(this, 'left')} onTouchStart={this.handlePress.bind(this, 'left')} onMouseUp={this.handleRelease.bind(this, 'left')} onMouseDown={this.handlePress.bind(this, 'left')}>left</button>
+          <button onTouchEnd={this.handleRelease.bind(this, 'right')} onTouchStart={this.handlePress.bind(this, 'right')} onMouseUp={this.handleRelease.bind(this, 'right')} onMouseDown={this.handlePress.bind(this, 'right')}>right</button>
         </div>
         <div className="bottomButton">
-          <button onTouchEnd={this.handleRelease} onTouchStart={this.handlePress.bind(this, 'down')} onMouseUp={this.handleRelease} onMouseDown={this.handlePress.bind(this, 'down')}>down</button>
+          <button onTouchEnd={this.handleRelease.bind(this, 'down')} onTouchStart={this.handlePress.bind(this, 'down')} onMouseUp={this.handleRelease.bind(this, 'down')} onMouseDown={this.handlePress.bind(this, 'down')}>down</button>
         </div>
       </div>
     );
