@@ -10,6 +10,10 @@ var ButtonInterface = React.createClass({
 
   //send message to robot server on button press
   handlePress: function(direction) {
+    if (direction === lastButton)
+    return;
+
+    this.lastButton = direction;
     switch (direction) {
       case 'up':
       socket.emit(command.COMMAND, command.FORWARD);
@@ -27,6 +31,8 @@ var ButtonInterface = React.createClass({
   },
 
   lastEvent: undefined,
+
+  lastButton: undefined,
 
   //send message to robot server on keypress,  stop listening to any futher
   //key presses until key is released
@@ -62,7 +68,11 @@ var ButtonInterface = React.createClass({
     }
   },
   //send message to robot server on button release
-  handleRelease: function() {
+  handleRelease: function(direction) {
+    if (direction !== this.lastButton)
+    return;
+
+    this.lastButton = undefined;
     socket.emit(command.COMMAND, command.STOP);
   },
 
