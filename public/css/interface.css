@@ -12,3 +12,7 @@ button {
   width: 50%;
   height: 25vh;
 }
+
+button:active{
+  background-color: black;
+}
