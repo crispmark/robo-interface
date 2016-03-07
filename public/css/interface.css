@@ -13,6 +13,6 @@ button {
   height: 25vh;
 }
 
-button:active{
+.activeButton{
   background-color: black;
 }

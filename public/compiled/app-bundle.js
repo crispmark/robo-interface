@@ -72,28 +72,19 @@
 	  displayName: 'ButtonInterface',
 	
 	
+	  getInitialState: function getInitialState() {
+	    return { activeCommand: undefined };
+	  },
+	
 	  //send message to robot server on button press
 	  handlePress: function handlePress(direction) {
 	    if (direction === this.lastButton) return;
 	
 	    this.lastButton = direction;
-	    switch (direction) {
-	      case 'up':
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.FORWARD);
-	        break;
-	      case 'down':
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.REVERSE);
-	        break;
-	      case 'left':
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.TURN_LEFT);
-	        break;
-	      case 'right':
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.TURN_RIGHT);
-	        break;
-	    }
-	  },
 	
-	  lastEvent: undefined,
+	    this.setState({ activeCommand: direction });
+	    socket.emit(_roboCommands2.default.COMMAND, direction);
+	  },
 	
 	  lastButton: undefined,
 	
@@ -103,37 +94,23 @@
 	
 	    var code = e.code;
 	
-	    //dont resend message if event is the same
-	    if (code === this.lastEvent) return;
+	    var direction = getDirectionFromKey(code);
 	
-	    switch (code) {
-	      case 'KeyW':
-	      case 'ArrowUp':
-	        this.lastEvent = code;
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.FORWARD);
-	        break;
-	      case 'KeyS':
-	      case 'ArrowDown':
-	        this.lastEvent = code;
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.REVERSE);
-	        break;
-	      case 'KeyA':
-	      case 'ArrowLeft':
-	        this.lastEvent = code;
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.TURN_LEFT);
-	        break;
-	      case 'KeyD':
-	      case 'ArrowRight':
-	        this.lastEvent = code;
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.TURN_RIGHT);
-	        break;
-	    }
+	    if (!direction) return;
+	
+	    if (direction === this.lastButton) return;
+	
+	    this.lastButton = direction;
+	
+	    this.setState({ activeCommand: direction });
+	    socket.emit(_roboCommands2.default.COMMAND, direction);
 	  },
 	  //send message to robot server on button release
 	  handleRelease: function handleRelease(direction) {
 	    if (direction !== this.lastButton) return;
 	
 	    this.lastButton = undefined;
+	    this.setState({ activeCommand: undefined });
 	    socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.STOP);
 	  },
 	
@@ -142,21 +119,12 @@
 	  handleKeyUp: function handleKeyUp(e) {
 	    var code = e.code;
 	
-	    if (code !== this.lastEvent) return;
+	    var direction = getDirectionFromKey(code);
+	    if (!direction) return;
 	
-	    switch (code) {
-	      case 'KeyW':
-	      case 'KeyS':
-	      case 'KeyA':
-	      case 'KeyD':
-	      case 'ArrowUp':
-	      case 'ArrowDown':
-	      case 'ArrowLeft':
-	      case 'ArrowRight':
-	        this.lastEvent = undefined;
-	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.STOP);
-	        break;
-	    }
+	    this.lastButton = undefined;
+	    this.setState({ activeCommand: undefined });
+	    socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.STOP);
 	  },
 	
 	  //add key listeners on mount
@@ -172,44 +140,86 @@
 	  },
 	
 	  render: function render() {
+	    var activeCommand = this.state.activeCommand;
+	    var topButton = createTopButton.call(this, activeCommand);
+	    var bottomButton = createBottomButton.call(this, activeCommand);
+	    var leftButton = createLeftButton.call(this, activeCommand);
+	    var rightButton = createRightButton.call(this, activeCommand);
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'allButtons' },
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'topButton' },
-	        _react2.default.createElement(
-	          'button',
-	          { onTouchEnd: this.handleRelease.bind(this, 'up'), onTouchStart: this.handlePress.bind(this, 'up'), onMouseUp: this.handleRelease.bind(this, 'up'), onMouseDown: this.handlePress.bind(this, 'up') },
-	          'up'
-	        )
+	        topButton
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'sideButtons' },
-	        _react2.default.createElement(
-	          'button',
-	          { onTouchEnd: this.handleRelease.bind(this, 'left'), onTouchStart: this.handlePress.bind(this, 'left'), onMouseUp: this.handleRelease.bind(this, 'left'), onMouseDown: this.handlePress.bind(this, 'left') },
-	          'left'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { onTouchEnd: this.handleRelease.bind(this, 'right'), onTouchStart: this.handlePress.bind(this, 'right'), onMouseUp: this.handleRelease.bind(this, 'right'), onMouseDown: this.handlePress.bind(this, 'right') },
-	          'right'
-	        )
+	        leftButton,
+	        rightButton
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'bottomButton' },
-	        _react2.default.createElement(
-	          'button',
-	          { onTouchEnd: this.handleRelease.bind(this, 'down'), onTouchStart: this.handlePress.bind(this, 'down'), onMouseUp: this.handleRelease.bind(this, 'down'), onMouseDown: this.handlePress.bind(this, 'down') },
-	          'down'
-	        )
+	        bottomButton
 	      )
 	    );
 	  }
 	});
+	
+	function createTopButton(activeCommand) {
+	  return createButton.call(this, activeCommand, _roboCommands2.default.FORWARD);
+	}
+	
+	function createBottomButton(activeCommand) {
+	  return createButton.call(this, activeCommand, _roboCommands2.default.REVERSE);
+	}
+	
+	function createLeftButton(activeCommand) {
+	  return createButton.call(this, activeCommand, _roboCommands2.default.TURN_LEFT);
+	}
+	
+	function createRightButton(activeCommand) {
+	  return createButton.call(this, activeCommand, _roboCommands2.default.TURN_RIGHT);
+	}
+	
+	function createButton(activeCommand, direction) {
+	  if (activeCommand === direction) {
+	    return _react2.default.createElement(
+	      'button',
+	      { className: 'activeButton', onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseUp: this.handleRelease.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
+	      'BUTTON'
+	    );
+	  } else {
+	    return _react2.default.createElement(
+	      'button',
+	      { onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseUp: this.handleRelease.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
+	      'BUTTON'
+	    );
+	  }
+	}
+	
+	function getDirectionFromKey(key) {
+	  switch (key) {
+	    case 'KeyW':
+	    case 'ArrowUp':
+	      return _roboCommands2.default.FORWARD;
+	      break;
+	    case 'KeyS':
+	    case 'ArrowDown':
+	      return _roboCommands2.default.REVERSE;
+	      break;
+	    case 'KeyA':
+	    case 'ArrowLeft':
+	      return _roboCommands2.default.TURN_LEFT;
+	      break;
+	    case 'KeyD':
+	    case 'ArrowRight':
+	      return _roboCommands2.default.TURN_RIGHT;
+	      break;
+	  }
+	}
 	
 	// adds buttons to DOM
 	_reactDom2.default.render(_react2.default.createElement(ButtonInterface, null), document.getElementById('container'));

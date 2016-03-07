@@ -8,29 +8,20 @@ var socket = io.connect();
 //button interface for issuing commands to robot
 var ButtonInterface = React.createClass({
 
+  getInitialState: function() {
+    return {activeCommand: undefined};
+  },
+
   //send message to robot server on button press
   handlePress: function(direction) {
     if (direction === this.lastButton)
     return;
 
     this.lastButton = direction;
-    switch (direction) {
-      case 'up':
-      socket.emit(command.COMMAND, command.FORWARD);
-      break;
-      case 'down':
-      socket.emit(command.COMMAND, command.REVERSE);
-      break;
-      case 'left':
-      socket.emit(command.COMMAND, command.TURN_LEFT);
-      break;
-      case 'right':
-      socket.emit(command.COMMAND, command.TURN_RIGHT);
-      break;
-    }
-  },
 
-  lastEvent: undefined,
+    this.setState({activeCommand: direction});
+    socket.emit(command.COMMAND, direction);
+  },
 
   lastButton: undefined,
 
@@ -40,32 +31,19 @@ var ButtonInterface = React.createClass({
 
     var code = e.code;
 
-    //dont resend message if event is the same
-    if (code === this.lastEvent)
+    var direction = getDirectionFromKey(code);
+
+    if(!direction)
     return;
 
-    switch(code) {
-      case 'KeyW':
-      case 'ArrowUp':
-      this.lastEvent = code;
-      socket.emit(command.COMMAND, command.FORWARD);
-      break;
-      case 'KeyS':
-      case 'ArrowDown':
-      this.lastEvent = code;
-      socket.emit(command.COMMAND, command.REVERSE);
-      break;
-      case 'KeyA':
-      case 'ArrowLeft':
-      this.lastEvent = code;
-      socket.emit(command.COMMAND, command.TURN_LEFT);
-      break;
-      case 'KeyD':
-      case 'ArrowRight':
-      this.lastEvent = code;
-      socket.emit(command.COMMAND, command.TURN_RIGHT);
-      break;
-    }
+    if (direction === this.lastButton)
+    return;
+
+    this.lastButton = direction;
+
+    this.setState({activeCommand: direction});
+    socket.emit(command.COMMAND, direction);
+
   },
   //send message to robot server on button release
   handleRelease: function(direction) {
@@ -73,6 +51,7 @@ var ButtonInterface = React.createClass({
     return;
 
     this.lastButton = undefined;
+    this.setState({activeCommand: undefined});
     socket.emit(command.COMMAND, command.STOP);
   },
 
@@ -81,22 +60,13 @@ var ButtonInterface = React.createClass({
   handleKeyUp: function(e) {
     var code = e.code;
 
-    if(code !== this.lastEvent)
+    var direction = getDirectionFromKey(code);
+    if (!direction)
     return;
 
-    switch(code) {
-      case 'KeyW':
-      case 'KeyS':
-      case 'KeyA':
-      case 'KeyD':
-      case 'ArrowUp':
-      case 'ArrowDown':
-      case 'ArrowLeft':
-      case 'ArrowRight':
-      this.lastEvent = undefined;
-      socket.emit(command.COMMAND, command.STOP);
-      break;
-    }
+    this.lastButton = undefined;
+    this.setState({activeCommand: undefined});
+    socket.emit(command.COMMAND, command.STOP);
   },
 
   //add key listeners on mount
@@ -112,23 +82,73 @@ var ButtonInterface = React.createClass({
   },
 
   render: function() {
+    var activeCommand = this.state.activeCommand;
+    var topButton = createTopButton.call(this, activeCommand);
+    var bottomButton = createBottomButton.call(this, activeCommand);
+    var leftButton = createLeftButton.call(this, activeCommand);
+    var rightButton = createRightButton.call(this, activeCommand);
     return (
       <div className="allButtons">
         <div className="topButton">
-          <button onTouchEnd={this.handleRelease.bind(this, 'up')} onTouchStart={this.handlePress.bind(this, 'up')} onMouseUp={this.handleRelease.bind(this, 'up')} onMouseDown={this.handlePress.bind(this, 'up')}>up</button>
+          {topButton}
         </div>
         <div className="sideButtons">
-          <button onTouchEnd={this.handleRelease.bind(this, 'left')} onTouchStart={this.handlePress.bind(this, 'left')} onMouseUp={this.handleRelease.bind(this, 'left')} onMouseDown={this.handlePress.bind(this, 'left')}>left</button>
-          <button onTouchEnd={this.handleRelease.bind(this, 'right')} onTouchStart={this.handlePress.bind(this, 'right')} onMouseUp={this.handleRelease.bind(this, 'right')} onMouseDown={this.handlePress.bind(this, 'right')}>right</button>
+          {leftButton}
+          {rightButton}
         </div>
         <div className="bottomButton">
-          <button onTouchEnd={this.handleRelease.bind(this, 'down')} onTouchStart={this.handlePress.bind(this, 'down')} onMouseUp={this.handleRelease.bind(this, 'down')} onMouseDown={this.handlePress.bind(this, 'down')}>down</button>
+          {bottomButton}
         </div>
       </div>
     );
   }
 });
 
+function createTopButton(activeCommand) {
+  return createButton.call(this, activeCommand, command.FORWARD);
+}
+
+function createBottomButton(activeCommand) {
+  return createButton.call(this, activeCommand, command.REVERSE);
+}
+
+function createLeftButton(activeCommand) {
+  return createButton.call(this, activeCommand, command.TURN_LEFT);
+}
+
+function createRightButton(activeCommand) {
+  return createButton.call(this, activeCommand, command.TURN_RIGHT);
+}
+
+function createButton(activeCommand, direction) {
+  if (activeCommand === direction) {
+    return(<button className="activeButton" onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseUp={this.handleRelease.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
+  }
+  else {
+    return (<button onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseUp={this.handleRelease.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
+  }
+}
+
+function getDirectionFromKey(key) {
+  switch(key) {
+    case 'KeyW':
+    case 'ArrowUp':
+    return command.FORWARD;
+    break;
+    case 'KeyS':
+    case 'ArrowDown':
+    return command.REVERSE;
+    break;
+    case 'KeyA':
+    case 'ArrowLeft':
+    return command.TURN_LEFT;
+    break;
+    case 'KeyD':
+    case 'ArrowRight':
+    return command.TURN_RIGHT;
+    break;
+  }
+}
 
 // adds buttons to DOM
 ReactDOM.render(<ButtonInterface />, document.getElementById('container'));
