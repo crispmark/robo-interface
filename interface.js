@@ -10,7 +10,7 @@ var ButtonInterface = React.createClass({
 
   //send message to robot server on button press
   handlePress: function(direction) {
-    if (direction === lastButton)
+    if (direction === this.lastButton)
     return;
 
     this.lastButton = direction;

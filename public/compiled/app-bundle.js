@@ -74,6 +74,9 @@
 	
 	  //send message to robot server on button press
 	  handlePress: function handlePress(direction) {
+	    if (direction === this.lastButton) return;
+	
+	    this.lastButton = direction;
 	    switch (direction) {
 	      case 'up':
 	        socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.FORWARD);
@@ -91,6 +94,8 @@
 	  },
 	
 	  lastEvent: undefined,
+	
+	  lastButton: undefined,
 	
 	  //send message to robot server on keypress,  stop listening to any futher
 	  //key presses until key is released
@@ -125,7 +130,10 @@
 	    }
 	  },
 	  //send message to robot server on button release
-	  handleRelease: function handleRelease() {
+	  handleRelease: function handleRelease(direction) {
+	    if (direction !== this.lastButton) return;
+	
+	    this.lastButton = undefined;
 	    socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.STOP);
 	  },
 	
@@ -172,7 +180,7 @@
 	        { className: 'topButton' },
 	        _react2.default.createElement(
 	          'button',
-	          { onMouseUp: this.handleRelease, onMouseDown: this.handlePress.bind(this, 'up') },
+	          { onTouchEnd: this.handleRelease.bind(this, 'up'), onTouchStart: this.handlePress.bind(this, 'up'), onMouseUp: this.handleRelease.bind(this, 'up'), onMouseDown: this.handlePress.bind(this, 'up') },
 	          'up'
 	        )
 	      ),
@@ -181,12 +189,12 @@
 	        { className: 'sideButtons' },
 	        _react2.default.createElement(
 	          'button',
-	          { onMouseUp: this.handleRelease, onMouseDown: this.handlePress.bind(this, 'left') },
+	          { onTouchEnd: this.handleRelease.bind(this, 'left'), onTouchStart: this.handlePress.bind(this, 'left'), onMouseUp: this.handleRelease.bind(this, 'left'), onMouseDown: this.handlePress.bind(this, 'left') },
 	          'left'
 	        ),
 	        _react2.default.createElement(
 	          'button',
-	          { onMouseUp: this.handleRelease, onMouseDown: this.handlePress.bind(this, 'right') },
+	          { onTouchEnd: this.handleRelease.bind(this, 'right'), onTouchStart: this.handlePress.bind(this, 'right'), onMouseUp: this.handleRelease.bind(this, 'right'), onMouseDown: this.handlePress.bind(this, 'right') },
 	          'right'
 	        )
 	      ),
@@ -195,7 +203,7 @@
 	        { className: 'bottomButton' },
 	        _react2.default.createElement(
 	          'button',
-	          { onMouseUp: this.handleRelease, onMouseDown: this.handlePress.bind(this, 'down') },
+	          { onTouchEnd: this.handleRelease.bind(this, 'down'), onTouchStart: this.handlePress.bind(this, 'down'), onMouseUp: this.handleRelease.bind(this, 'down'), onMouseDown: this.handlePress.bind(this, 'down') },
 	          'down'
 	        )
 	      )
