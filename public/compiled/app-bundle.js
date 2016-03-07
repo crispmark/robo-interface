@@ -98,12 +98,7 @@
 	
 	    if (!direction) return;
 	
-	    if (direction === this.lastButton) return;
-	
-	    this.lastButton = direction;
-	
-	    this.setState({ activeCommand: direction });
-	    socket.emit(_roboCommands2.default.COMMAND, direction);
+	    this.handlePress(direction);
 	  },
 	  //send message to robot server on button release
 	  handleRelease: function handleRelease(direction) {
@@ -122,9 +117,7 @@
 	    var direction = getDirectionFromKey(code);
 	    if (!direction) return;
 	
-	    this.lastButton = undefined;
-	    this.setState({ activeCommand: undefined });
-	    socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.STOP);
+	    this.handleRelease(direction);
 	  },
 	
 	  //add key listeners on mount
@@ -168,22 +161,28 @@
 	  }
 	});
 	
+	//create button to move robot forward
 	function createTopButton(activeCommand) {
 	  return createButton.call(this, activeCommand, _roboCommands2.default.FORWARD);
 	}
 	
+	//create button to move robot back
 	function createBottomButton(activeCommand) {
 	  return createButton.call(this, activeCommand, _roboCommands2.default.REVERSE);
 	}
 	
+	//create button to turn robot left
 	function createLeftButton(activeCommand) {
 	  return createButton.call(this, activeCommand, _roboCommands2.default.TURN_LEFT);
 	}
 	
+	//create button to turn robot right
 	function createRightButton(activeCommand) {
 	  return createButton.call(this, activeCommand, _roboCommands2.default.TURN_RIGHT);
 	}
 	
+	//given two strings, the active command and a direction, create an input button
+	//for controlling the robot
 	function createButton(activeCommand, direction) {
 	  if (activeCommand === direction) {
 	    return _react2.default.createElement(
@@ -200,6 +199,7 @@
 	  }
 	}
 	
+	//given a keyboard key, converts to a robot command
 	function getDirectionFromKey(key) {
 	  switch (key) {
 	    case 'KeyW':

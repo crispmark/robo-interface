@@ -36,14 +36,7 @@ var ButtonInterface = React.createClass({
     if(!direction)
     return;
 
-    if (direction === this.lastButton)
-    return;
-
-    this.lastButton = direction;
-
-    this.setState({activeCommand: direction});
-    socket.emit(command.COMMAND, direction);
-
+    this.handlePress(direction);
   },
   //send message to robot server on button release
   handleRelease: function(direction) {
@@ -64,9 +57,7 @@ var ButtonInterface = React.createClass({
     if (!direction)
     return;
 
-    this.lastButton = undefined;
-    this.setState({activeCommand: undefined});
-    socket.emit(command.COMMAND, command.STOP);
+    this.handleRelease(direction);
   },
 
   //add key listeners on mount
@@ -104,22 +95,29 @@ var ButtonInterface = React.createClass({
   }
 });
 
+
+//create button to move robot forward
 function createTopButton(activeCommand) {
   return createButton.call(this, activeCommand, command.FORWARD);
 }
 
+//create button to move robot back
 function createBottomButton(activeCommand) {
   return createButton.call(this, activeCommand, command.REVERSE);
 }
 
+//create button to turn robot left
 function createLeftButton(activeCommand) {
   return createButton.call(this, activeCommand, command.TURN_LEFT);
 }
 
+//create button to turn robot right
 function createRightButton(activeCommand) {
   return createButton.call(this, activeCommand, command.TURN_RIGHT);
 }
 
+//given two strings, the active command and a direction, create an input button
+//for controlling the robot
 function createButton(activeCommand, direction) {
   if (activeCommand === direction) {
     return(<button className="activeButton" onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseUp={this.handleRelease.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
@@ -129,6 +127,7 @@ function createButton(activeCommand, direction) {
   }
 }
 
+//given a keyboard key, converts to a robot command
 function getDirectionFromKey(key) {
   switch(key) {
     case 'KeyW':
