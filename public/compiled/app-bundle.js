@@ -166,7 +166,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'allButtons', onKeyDown: this.handleKeyPress },
+	      { className: 'allButtons' },
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'topButton' },

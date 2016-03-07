@@ -103,7 +103,7 @@ var ButtonInterface = React.createClass({
 
   render: function() {
     return (
-      <div className="allButtons" onKeyDown={this.handleKeyPress}>
+      <div className="allButtons">
         <div className="topButton">
           <button onMouseUp={this.handleRelease} onMouseDown={this.handlePress.bind(this, 'up')}>up</button>
         </div>
