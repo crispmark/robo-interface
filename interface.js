@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
-import command from './robo-commands.js'
+import command from './robo-commands.js';
+
 //establish connection to server
 var socket = io.connect();
 
@@ -38,6 +39,14 @@ var ButtonInterface = React.createClass({
 
     this.handlePress(direction);
   },
+
+  //mouseup always releases button
+  handleMouseUp: function() {
+    this.lastButton = undefined;
+    this.setState({activeCommand: undefined});
+    socket.emit(command.COMMAND, command.STOP);
+  },
+
   //send message to robot server on button release
   handleRelease: function(direction) {
     if (direction !== this.lastButton)
@@ -62,12 +71,14 @@ var ButtonInterface = React.createClass({
 
   //add key listeners on mount
   componentWillMount:function(){
+    document.addEventListener("mouseup", this.handleMouseUp, false);
     document.addEventListener("keydown", this.handleKeyDown, false);
     document.addEventListener("keyup", this.handleKeyUp, false);
   },
 
   //remove key listeners on unmount
   componentWillUnmount: function() {
+    document.removeEventListener("mouseup", this.handleMouseUp, false);
     document.removeEventListener("keydown", this.handleKeyDown, false);
     document.removeEventListener("keyup", this.handleKeyUp, false);
   },
@@ -120,10 +131,10 @@ function createRightButton(activeCommand) {
 //for controlling the robot
 function createButton(activeCommand, direction) {
   if (activeCommand === direction) {
-    return(<button className="activeButton" onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseUp={this.handleRelease.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
+    return(<button className="activeButton" onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
   }
   else {
-    return (<button onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseUp={this.handleRelease.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
+    return (<button onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
   }
 }
 

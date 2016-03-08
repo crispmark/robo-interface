@@ -100,6 +100,14 @@
 	
 	    this.handlePress(direction);
 	  },
+	
+	  //mouseup always releases button
+	  handleMouseUp: function handleMouseUp() {
+	    this.lastButton = undefined;
+	    this.setState({ activeCommand: undefined });
+	    socket.emit(_roboCommands2.default.COMMAND, _roboCommands2.default.STOP);
+	  },
+	
 	  //send message to robot server on button release
 	  handleRelease: function handleRelease(direction) {
 	    if (direction !== this.lastButton) return;
@@ -122,12 +130,14 @@
 	
 	  //add key listeners on mount
 	  componentWillMount: function componentWillMount() {
+	    document.addEventListener("mouseup", this.handleMouseUp, false);
 	    document.addEventListener("keydown", this.handleKeyDown, false);
 	    document.addEventListener("keyup", this.handleKeyUp, false);
 	  },
 	
 	  //remove key listeners on unmount
 	  componentWillUnmount: function componentWillUnmount() {
+	    document.removeEventListener("mouseup", this.handleMouseUp, false);
 	    document.removeEventListener("keydown", this.handleKeyDown, false);
 	    document.removeEventListener("keyup", this.handleKeyUp, false);
 	  },
@@ -187,13 +197,13 @@
 	  if (activeCommand === direction) {
 	    return _react2.default.createElement(
 	      'button',
-	      { className: 'activeButton', onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseUp: this.handleRelease.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
+	      { className: 'activeButton', onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
 	      'BUTTON'
 	    );
 	  } else {
 	    return _react2.default.createElement(
 	      'button',
-	      { onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseUp: this.handleRelease.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
+	      { onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
 	      'BUTTON'
 	    );
 	  }
