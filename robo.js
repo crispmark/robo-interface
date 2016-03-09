@@ -1,5 +1,5 @@
 var five = require("johnny-five");
-var command = require('./robo-commands.js')
+var command = require('./robo-commands.js');
 
 var Raspi = require("raspi-io");
 var board = new five.Board({
@@ -7,8 +7,8 @@ var board = new five.Board({
 });
 
 board.on("ready", function() {
-  var led = new five.Led("P1-13");
-  led.blink();
+  var led = new five.Led("GPIO47");
+  led.strobe();
 });
 
 var io = require('socket.io-client')('http://localhost:3000', {query: 'type=robot'});
