@@ -1,15 +1,5 @@
-var five = require("johnny-five");
 var command = require('./robo-commands.js');
-
-var Raspi = require("raspi-io");
-var board = new five.Board({
-  io: new Raspi()
-});
-
-board.on("ready", function() {
-  var led = new five.Led("GPIO47");
-  led.strobe();
-});
+var motor = require('./motorControl.js')
 
 var io = require('socket.io-client')('http://localhost:3000', {query: 'type=robot'});
 
@@ -18,5 +8,15 @@ var socket = io.connect();
 
 //listen for commands to robot
 socket.on(command.COMMAND, function(msg) {
-  console.log(msg);
+  switch(msg) {
+    case command.FORWARD:
+    motor.runMotor(1, 64);
+    break;
+    case command.REVERSE:
+    motor.runMotor(1, 0);
+    break;
+    case command.STOP:
+    motor.runMotor(1, -64);
+    break;
+  }
 });
