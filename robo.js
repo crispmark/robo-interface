@@ -11,12 +11,15 @@ socket.on(command.COMMAND, function(msg) {
   switch(msg) {
     case command.FORWARD:
     motor.runMotor(1, 64);
+    motor.runMotor(2, 64);
     break;
     case command.REVERSE:
     motor.runMotor(1, -64);
+    motor.runMotor(2, -64);
     break;
     case command.STOP:
     motor.runMotor(1, 0);
+    motor.runMotor(2, 0);
     break;
   }
 });
