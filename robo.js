@@ -17,6 +17,14 @@ socket.on(command.COMMAND, function(msg) {
     motor.runMotor(1, -64);
     motor.runMotor(2, -64);
     break;
+    case command.TURN_LEFT:
+    motor.runMotor(1, 32);
+    motor.runMotor(2, -32);
+    break;
+    case command.TURN_RIGHT:
+    motor.runMotor(1, -32);
+    motor.runMotor(2, 32);
+    break;
     case command.STOP:
     motor.runMotor(1, 0);
     motor.runMotor(2, 0);
