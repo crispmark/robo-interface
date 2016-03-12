@@ -131,10 +131,10 @@ function createRightButton(activeCommand) {
 //for controlling the robot
 function createButton(activeCommand, direction) {
   if (activeCommand === direction) {
-    return(<button className="activeButton" onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
+    return(<button className="activeButton" onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>{direction}</button>);
   }
   else {
-    return (<button onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>BUTTON</button>);
+    return (<button onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>{direction}</button>);
   }
 }
 
