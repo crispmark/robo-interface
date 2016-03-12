@@ -18,7 +18,7 @@ def runMotor(n, spd):
 		myMotor.run(Adafruit_MotorHAT.FORWARD)
 
 	else:
-        myMotor.run(Adafruit_MotorHAT.RELEASE)
+		myMotor.run(Adafruit_MotorHAT.RELEASE)
 
 	absSpeed = abs(spd)
 	myMotor.setSpeed(absSpeed)
