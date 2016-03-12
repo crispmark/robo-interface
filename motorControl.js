@@ -1,4 +1,5 @@
 var PythonShell = require('python-shell');
+
 function runMotor(motor, speed) {
   var pyshell = new PythonShell('./motorControl.py');
   // sends a message to the Python script via stdin
