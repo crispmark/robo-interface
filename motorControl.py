@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 
-import time
-import atexit
+#import time
+#import atexit
 import sys, json
 
 # create a default object, no changes to I2C address or frequency
@@ -18,7 +18,7 @@ def runMotor(n, spd):
 		myMotor.run(Adafruit_MotorHAT.FORWARD)
 
 	else:
-        	myMotor.run(Adafruit_MotorHAT.RELEASE)
+        myMotor.run(Adafruit_MotorHAT.RELEASE)
 
 	absSpeed = abs(spd)
 	myMotor.setSpeed(absSpeed)
