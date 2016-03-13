@@ -57,7 +57,7 @@ function stop() {
   m2.stop();
 }
 
-module.exports = { board, runCommand };
+module.exports = { board: board, runCommand: runCommand };
 // var STEPS = 10;
 // var TIMESTEP = 100;
 //
