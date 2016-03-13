@@ -10,8 +10,8 @@ const configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V2;
 const m1 = new five.Motor(configs.M1);
 const m2 = new five.Motor(configs.M2);
 
-const SPEED = 255;
-const TURN_SPEED = 128;
+const SPEED = 128;
+const TURN_SPEED = 64;
 
 function runCommand (val) {
   switch(val) {
