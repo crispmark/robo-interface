@@ -1,43 +1,36 @@
-var command = require('./robo-commands.js');
-var five = require("johnny-five");
-var Raspi = require("raspi-io");
-var board = new five.Board({
+const command = require('./robo-commands.js');
+const five = require("johnny-five");
+const Raspi = require("raspi-io");
+const board = new five.Board({
   io: new Raspi()
 });
 // pull motor configs from ADAFRUIT_V2 template
-var configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V2;
+const configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V2;
 // instantiate motors
-var m1 = new five.Motor(configs.M1);
-var m2 = new five.Motor(configs.M2);
+const m1 = new five.Motor(configs.M1);
+const m2 = new five.Motor(configs.M2);
 
-var io = require('socket.io-client')('http://localhost:3000', {query: 'type=robot'});
-//establish connection to server
-var socket = io.connect();
+const SPEED = 64;
 
-var SPEED = 64;
-
-board.on("ready", function() {
-  //listen for commands to robot
-  socket.on(command.COMMAND, function(msg) {
-    switch(msg) {
-      case command.FORWARD:
-        forward(SPEED);
-        break;
-      case command.REVERSE:
-        reverse(SPEED);
-        break;
-      case command.TURN_LEFT:
-        left(SPEED);
-        break;
-      case command.TURN_RIGHT:
-        right(SPEED);
-        break;
-      case command.STOP:
-        stop();
-        break;
-    }
-  });
-});
+function runCommand (val) {
+  switch(val) {
+    case command.FORWARD:
+      forward(SPEED);
+      break;
+    case command.REVERSE:
+      reverse(SPEED);
+      break;
+    case command.TURN_LEFT:
+      left(SPEED);
+      break;
+    case command.TURN_RIGHT:
+      right(SPEED);
+      break;
+    case command.STOP:
+      stop();
+      break;
+  }
+}
 
 function forward (speed) {
   m1.fwd(speed);
@@ -63,6 +56,8 @@ function stop() {
   m1.stop();
   m2.stop();
 }
+
+module.exports = { board, runCommand };
 // var STEPS = 10;
 // var TIMESTEP = 100;
 //
