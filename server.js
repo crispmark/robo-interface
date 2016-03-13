@@ -37,6 +37,11 @@ robo.board.on('ready', function() {
       console.log('a user disconnected (id:', socket.id, ')');
     });
   });
+
+  // cleanup on exit
+  this.on("exit", function() {
+    robo.runCommand(command.STOP);
+  });
 })
 
 
