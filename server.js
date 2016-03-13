@@ -26,7 +26,7 @@ const command = require('./robo-commands');
 robo.board.on('ready', function() {
   // board is ready, start listening for socket messages
   io.on('connection', function(socket) {
-    console.log(`a user connected (id: ${socket.id})`);
+    console.log('a user connected (id:', socket.id, ')');
 
     //listen for commands to robot
     socket.on(command.COMMAND, function(msg) {
@@ -34,7 +34,7 @@ robo.board.on('ready', function() {
     });
 
     socket.on('disconnect', function(){
-      console.log(`a user disconnected (id: ${socket.id})`);
+      console.log('a user disconnected (id:', socket.id, ')');
     });
   });
 })
