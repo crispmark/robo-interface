@@ -1,33 +1,46 @@
-var command = require('./robo-commands.js');
-var motor = require('./motorControl.js')
+const PythonShell = require('python-shell');
+const command = require('./robo-commands.js');
 
-var io = require('socket.io-client')('http://localhost:3000', {query: 'type=robot'});
+const SPEED = 144;
+const TURN_SPEED = 96;
 
-//establish connection to server
-var socket = io.connect();
-
-//listen for commands to robot
-socket.on(command.COMMAND, function(msg) {
+// runs commands received as messages (on the socket connection in server.js)
+function runCommand (msg) {
   switch(msg) {
     case command.FORWARD:
-      motor.runMotor(1, 64);
-      motor.runMotor(2, 64);
+      runMotor(1, SPEED);
+      runMotor(2, SPEED);
       break;
     case command.REVERSE:
-      motor.runMotor(1, -64);
-      motor.runMotor(2, -64);
+      runMotor(1, -SPEED);
+      runMotor(2, -SPEED);
       break;
     case command.TURN_LEFT:
-      motor.runMotor(1, 32);
-      motor.runMotor(2, -32);
+      runMotor(1, TURN_SPEED);
+      runMotor(2, -TURN_SPEED);
       break;
     case command.TURN_RIGHT:
-      motor.runMotor(1, -32);
-      motor.runMotor(2, 32);
+      runMotor(1, -TURN_SPEED);
+      runMotor(2, TURN_SPEED);
       break;
     case command.STOP:
-      motor.runMotor(1, 0);
-      motor.runMotor(2, 0);
+      runMotor(1, 0);
+      runMotor(2, 0);
       break;
   }
-});
+}
+
+function runMotor(motor, speed) {
+  var pyshell = new PythonShell('./motorControl.py');
+  // sends a message to the Python script via stdin
+  pyshell.send(JSON.stringify({motor: motor, speed: speed}));
+
+  // end the input stream and allow the process to exit
+  pyshell.end(function (err) {
+    if (err) throw err;
+  });
+}
+
+module.exports = {
+  runCommand: runCommand
+}
