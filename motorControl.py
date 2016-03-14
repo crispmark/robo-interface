@@ -29,4 +29,4 @@ for line in sys.stdin:
     motor = command['motor']
     speed = command['speed']
     runMotor(motor, speed)
-    print 'ya did it'
+    print ('ya did it')

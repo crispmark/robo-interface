@@ -1,5 +1,6 @@
 const PythonShell = require('python-shell');
 const command = require('./robo-commands.js');
+const exec = require('child_process').exec;
 
 const SPEED = 144;
 const TURN_SPEED = 96;
@@ -31,14 +32,16 @@ function runCommand (msg) {
 }
 
 function runMotor(motor, speed) {
-  var pyshell = new PythonShell('./motorControl.py');
-  // sends a message to the Python script via stdin
-  pyshell.send(JSON.stringify({motor: motor, speed: speed}));
+  // var pyshell = new PythonShell('./motorControl.py');
+  // // sends a message to the Python script via stdin
+  // pyshell.send(JSON.stringify({motor: motor, speed: speed}));
+  //
+  // // end the input stream and allow the process to exit
+  // pyshell.end(function (err) {
+  //   if (err) throw err;
+  // });
 
-  // end the input stream and allow the process to exit
-  pyshell.end(function (err) {
-    if (err) throw err;
-  });
+  exec('python2 motorControl.py ' + JSON.stringify({motor: motor, speed: speed}), function(){});
 }
 
 module.exports = {
