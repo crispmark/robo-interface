@@ -44,7 +44,7 @@ function runMotor(motor, speed) {
   //   if (err) throw err;
   // });
 
-  exec('python2 motorControl.py ' + JSON.stringify({motor: motor, speed: speed}), function(error, stdout, stderr) {
+  exec('python2 motorControl.py \'' + JSON.stringify({motor: motor, speed: speed}) + '\'', function(error, stdout, stderr) {
     console.log('stdout:', stdout);
     console.log('stderr:', stderr);
     if (error !== null) {
