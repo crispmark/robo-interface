@@ -32,7 +32,9 @@ function runCommand (msg) {
 }
 
 function runMotor(motor, speed) {
-  var pyshell = new PythonShell('./motorControl.py');
+  var pyshell = new PythonShell('./motorControl.py', {
+  pythonPath: 'python2',
+});
   // sends a message to the Python script via stdin
   pyshell.send(JSON.stringify({motor: motor, speed: speed}));
 
