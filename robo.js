@@ -4,10 +4,11 @@ const command = require('./robo-commands.js');
 const SPEED = 64;
 const TURN_SPEED = 64;
 //the time at which the last command was received
-var lastCommand = -infinity;
+var lastCommand = -Infinity;
 
 // runs commands received as messages (on the socket connection in server.js)
 function runCommand (msg) {
+  console.log(msg);
   var command = msg.command;
   switch(msg) {
     case command.FORWARD:
