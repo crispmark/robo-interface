@@ -8,28 +8,30 @@ var lastCommand = -Infinity;
 
 // runs commands received as messages (on the socket connection in server.js)
 function runCommand (msg) {
-  console.log(msg);
-  switch(msg.command) {
-    case command.FORWARD:
-    runMotor(1, SPEED);
-    runMotor(2, SPEED);
-    break;
-    case command.REVERSE:
-    runMotor(1, -SPEED);
-    runMotor(2, -SPEED);
-    break;
-    case command.TURN_LEFT:
-    runMotor(1, TURN_SPEED);
-    runMotor(2, -TURN_SPEED);
-    break;
-    case command.TURN_RIGHT:
-    runMotor(1, -TURN_SPEED);
-    runMotor(2, TURN_SPEED);
-    break;
-    case command.STOP:
-    runMotor(1, 0);
-    runMotor(2, 0);
-    break;
+  if (msg.time > lastCommand) {
+    lastCommand = msg.time;
+    switch(msg.command) {
+      case command.FORWARD:
+      runMotor(1, SPEED);
+      runMotor(2, SPEED);
+      break;
+      case command.REVERSE:
+      runMotor(1, -SPEED);
+      runMotor(2, -SPEED);
+      break;
+      case command.TURN_LEFT:
+      runMotor(1, TURN_SPEED);
+      runMotor(2, -TURN_SPEED);
+      break;
+      case command.TURN_RIGHT:
+      runMotor(1, -TURN_SPEED);
+      runMotor(2, TURN_SPEED);
+      break;
+      case command.STOP:
+      runMotor(1, 0);
+      runMotor(2, 0);
+      break;
+    }
   }
 }
 
