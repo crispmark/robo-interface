@@ -35,6 +35,7 @@ function runCommand (val) {
 }
 
 function forward (speed) {
+  console.log('foward');
   m1.fwd(speed);
   m2.fwd(speed);
 }
