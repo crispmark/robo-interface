@@ -21,7 +21,7 @@ var ButtonInterface = React.createClass({
     this.lastButton = direction;
 
     this.setState({activeCommand: direction});
-    socket.emit(command.COMMAND, {command: direction});
+    socket.emit(command.COMMAND, {time: Date.now(), command: direction});
   },
 
   lastButton: undefined,
@@ -44,7 +44,7 @@ var ButtonInterface = React.createClass({
   handleMouseUp: function() {
     this.lastButton = undefined;
     this.setState({activeCommand: undefined});
-    socket.emit(command.COMMAND, {command: command.STOP});
+    socket.emit(command.COMMAND, {time: Date.now(), command: command.STOP});
   },
 
   //send message to robot server on button release
@@ -54,7 +54,7 @@ var ButtonInterface = React.createClass({
 
     this.lastButton = undefined;
     this.setState({activeCommand: undefined});
-    socket.emit(command.COMMAND, {command: command.STOP});
+    socket.emit(command.COMMAND, {time: Date.now(), command: command.STOP});
   },
 
   //send message to robot server on key release, start listening to key presses

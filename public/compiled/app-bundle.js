@@ -83,7 +83,7 @@
 	    this.lastButton = direction;
 	
 	    this.setState({ activeCommand: direction });
-	    socket.emit(_roboCommands2.default.COMMAND, { command: direction });
+	    socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: direction });
 	  },
 	
 	  lastButton: undefined,
@@ -105,7 +105,7 @@
 	  handleMouseUp: function handleMouseUp() {
 	    this.lastButton = undefined;
 	    this.setState({ activeCommand: undefined });
-	    socket.emit(_roboCommands2.default.COMMAND, { command: _roboCommands2.default.STOP });
+	    socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: _roboCommands2.default.STOP });
 	  },
 	
 	  //send message to robot server on button release
@@ -114,7 +114,7 @@
 	
 	    this.lastButton = undefined;
 	    this.setState({ activeCommand: undefined });
-	    socket.emit(_roboCommands2.default.COMMAND, { command: _roboCommands2.default.STOP });
+	    socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: _roboCommands2.default.STOP });
 	  },
 	
 	  //send message to robot server on key release, start listening to key presses
