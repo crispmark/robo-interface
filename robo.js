@@ -12,35 +12,30 @@ function runCommand (msg) {
     lastCommand = msg.time;
     switch(msg.command) {
       case command.FORWARD:
-      runMotor(1, SPEED);
-      runMotor(2, SPEED);
+      runMotor(1, SPEED, 2, SPEED);
       break;
       case command.REVERSE:
-      runMotor(1, -SPEED);
-      runMotor(2, -SPEED);
+      runMotor(1, -SPEED, 2, -SPEED);
       break;
       case command.TURN_LEFT:
-      runMotor(1, TURN_SPEED);
-      runMotor(2, -TURN_SPEED);
+      runMotor(1, TURN_SPEED, 2, -TURN_SPEED);
       break;
       case command.TURN_RIGHT:
-      runMotor(1, -TURN_SPEED);
-      runMotor(2, TURN_SPEED);
+      runMotor(1, -TURN_SPEED, 2, TURN_SPEED);
       break;
       case command.STOP:
-      runMotor(1, 0);
-      runMotor(2, 0);
+      runMotor(1, 0, 2, 0);
       break;
     }
   }
 }
 
-function runMotor(motor, speed) {
+function runMotor(lmotor, lspeed, rmotor, rspeed) {
   var pyshell = new PythonShell('./motorControl.py', {
     pythonPath: 'python2',
   });
   // sends a message to the Python script via stdin
-  pyshell.send(JSON.stringify({motor: motor, speed: speed}));
+  pyshell.send(JSON.stringify({left: {motor: lmotor, speed: lspeed}, right: {motor: rmotor, speed: rspeed}}));
 
   // end the input stream and allow the process to exit
   pyshell.end(function (err) {

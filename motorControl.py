@@ -26,7 +26,10 @@ def runMotor(n, spd):
 # accept commands
 for line in sys.stdin:
 	command = json.loads(line[:-1])
-	motor = command['motor']
-	speed = command['speed']
-	runMotor(motor, speed)
+	lmotor = command['left']['motor']
+	lspeed = command['left']['speed']
+	rmotor = command['right']['motor']
+	rspeed = command['right']['speed']
+	runMotor(lmotor, lspeed)
+	runMotor(rmotor, rspeed)
 	print ('ya did it')
