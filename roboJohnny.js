@@ -14,9 +14,10 @@ const SPEED = 128;
 const TURN_SPEED = 64;
 
 function runCommand (val) {
-  console.log('running command');
+  console.log('running command:', val);
   switch(val) {
     case command.FORWARD:
+      console.log('going forward');
       forward(SPEED);
       break;
     case command.REVERSE:
@@ -35,7 +36,7 @@ function runCommand (val) {
 }
 
 function forward (speed) {
-  console.log('foward');
+  console.log('inside forward');
   m1.fwd(speed);
   m2.fwd(speed);
 }
