@@ -69,7 +69,7 @@
 	
 	//creates a command message to send to the server
 	function createCommand(cmd) {
-	  return { time: 1, command: cmd };
+	  return { time: 1, command: _roboCommands2.default.STOP };
 	}
 	
 	//button interface for issuing commands to robot
