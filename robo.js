@@ -9,8 +9,7 @@ var lastCommand = -Infinity;
 // runs commands received as messages (on the socket connection in server.js)
 function runCommand (msg) {
   console.log(msg);
-  var command = msg.command;
-  switch(msg) {
+  switch(msg.command) {
     case command.FORWARD:
     runMotor(1, SPEED);
     runMotor(2, SPEED);
