@@ -67,6 +67,11 @@
 	//establish connection to server
 	var socket = _socket2.default.connect();
 	
+	//creates a command message to send to the server
+	function createCommand(cmd) {
+	  return { time: 1, command: cmd };
+	}
+	
 	//button interface for issuing commands to robot
 	var ButtonInterface = _react2.default.createClass({
 	  displayName: 'ButtonInterface',
@@ -83,7 +88,7 @@
 	    this.lastButton = direction;
 	
 	    this.setState({ activeCommand: direction });
-	    socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: direction });
+	    socket.emit(_roboCommands2.default.COMMAND, createCommand(direction));
 	  },
 	
 	  lastButton: undefined,
@@ -105,7 +110,7 @@
 	  handleMouseUp: function handleMouseUp() {
 	    this.lastButton = undefined;
 	    this.setState({ activeCommand: undefined });
-	    socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: _roboCommands2.default.STOP });
+	    socket.emit(_roboCommands2.default.COMMAND, createCommand(_roboCommands2.default.STOP));
 	  },
 	
 	  //send message to robot server on button release
@@ -114,7 +119,7 @@
 	
 	    this.lastButton = undefined;
 	    this.setState({ activeCommand: undefined });
-	    socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: _roboCommands2.default.STOP });
+	    socket.emit(_roboCommands2.default.COMMAND, createCommand(_roboCommands2.default.STOP));
 	  },
 	
 	  //send message to robot server on key release, start listening to key presses

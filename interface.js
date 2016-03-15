@@ -6,6 +6,11 @@ import command from './robo-commands.js';
 //establish connection to server
 var socket = io.connect();
 
+//creates a command message to send to the server
+function createCommand(cmd) {
+  return {time: 1, command: cmd}
+}
+
 //button interface for issuing commands to robot
 var ButtonInterface = React.createClass({
 
@@ -21,7 +26,7 @@ var ButtonInterface = React.createClass({
     this.lastButton = direction;
 
     this.setState({activeCommand: direction});
-    socket.emit(command.COMMAND, {time: Date.now(), command: direction});
+    socket.emit(command.COMMAND, createCommand(direction));
   },
 
   lastButton: undefined,
@@ -44,7 +49,7 @@ var ButtonInterface = React.createClass({
   handleMouseUp: function() {
     this.lastButton = undefined;
     this.setState({activeCommand: undefined});
-    socket.emit(command.COMMAND, {time: Date.now(), command: command.STOP});
+    socket.emit(command.COMMAND, createCommand(command.STOP));
   },
 
   //send message to robot server on button release
@@ -54,7 +59,7 @@ var ButtonInterface = React.createClass({
 
     this.lastButton = undefined;
     this.setState({activeCommand: undefined});
-    socket.emit(command.COMMAND, {time: Date.now(), command: command.STOP});
+    socket.emit(command.COMMAND, createCommand(command.STOP));
   },
 
   //send message to robot server on key release, start listening to key presses
