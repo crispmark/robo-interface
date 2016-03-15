@@ -14,6 +14,7 @@ const SPEED = 128;
 const TURN_SPEED = 64;
 
 function runCommand (val) {
+  val = val.command;
   console.log('running command:', val);
   switch(val) {
     case command.FORWARD:
