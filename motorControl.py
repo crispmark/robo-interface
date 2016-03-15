@@ -24,8 +24,9 @@ def runMotor(n, spd):
 	myMotor.setSpeed(absSpeed)
 
 # accept commands
-command = json.loads(sys.argv[1])
-motor = command['motor']
-speed = command['speed']
-runMotor(motor, speed)
-print ('ya did it')
+for line in sys.stdin:
+	command = json.loads(line[:-1])
+	motor = command['motor']
+	speed = command['speed']
+	runMotor(motor, speed)
+	print ('ya did it')
