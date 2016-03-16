@@ -21,8 +21,11 @@ const SPEED = 128;
 const TURN_SPEED = 64;
 
 function runCommand (msg) {
+  console.log('motors:', JSON.stringify(m1), JSON.stringify(m2))
+  console.log('runCommand():', msg.command)
   // don't attempt to move motors which haven't been instantiated yet
   if (!m1 || !m2) {
+    console.log('motors not ready, returning...')
     return;
   }
 
@@ -31,6 +34,7 @@ function runCommand (msg) {
 
   switch(msg) {
     case commands.FORWARD:
+      console.log('trying to move forward()...');
       forward(SPEED);
       break;
     case commands.REVERSE:
@@ -49,6 +53,7 @@ function runCommand (msg) {
 }
 
 function forward (speed) {
+  console.log('here we go...')
   m1.fwd(speed);
   m2.fwd(speed);
 }
