@@ -22,7 +22,7 @@ const TURN_SPEED = 64;
 
 function runCommand (msg) {
   msg = msg.command;
-  
+
   switch(msg) {
     case commands.FORWARD:
       forward(SPEED);
@@ -67,7 +67,7 @@ function stop() {
   m2.stop();
 }
 
-module.exports = { runCommand: runCommand };
+module.exports = { board: board, runCommand: runCommand };
 // var STEPS = 10;
 // var TIMESTEP = 100;
 //
