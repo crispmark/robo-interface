@@ -9,12 +9,12 @@ const board = new five.Board({
 const configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V2;
 
 // instantiate motors when board is ready
-const m1;
-const m2;
+var m1;
+var m2;
 
 board.on('ready', function() {
-  const m1 = new five.Motor(configs.M1);
-  const m2 = new five.Motor(configs.M2);
+  m1 = new five.Motor(configs.M1);
+  m2 = new five.Motor(configs.M2);
 });
 
 const SPEED = 128;
@@ -34,7 +34,6 @@ function runCommand (msg) {
 
   switch(msg) {
     case commands.FORWARD:
-      console.log('trying to move forward()...');
       forward(SPEED);
       break;
     case commands.REVERSE:
@@ -53,7 +52,6 @@ function runCommand (msg) {
 }
 
 function forward (speed) {
-  console.log('here we go...')
   m1.fwd(speed);
   m2.fwd(speed);
 }
