@@ -21,8 +21,6 @@ const SPEED = 128;
 const TURN_SPEED = 64;
 
 function runCommand (msg) {
-  console.log('motors:', JSON.stringify(m1), JSON.stringify(m2))
-  console.log('runCommand():', msg.command)
   // don't attempt to move motors which haven't been instantiated yet
   if (!m1 || !m2) {
     console.log('motors not ready, returning...')
