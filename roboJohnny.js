@@ -1,43 +1,47 @@
-const command = require('./robo-commands.js');
+const commands = require('./robo-commands.js');
 const five = require("johnny-five");
 const Raspi = require("raspi-io");
 const board = new five.Board({
   io: new Raspi()
 });
+
 // pull motor configs from ADAFRUIT_V2 template
 const configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V2;
-// instantiate motors
-const m1 = new five.Motor(configs.M1);
-const m2 = new five.Motor(configs.M2);
+
+// instantiate motors when board is ready
+const m1;
+const m2;
+
+board.on('ready', function() {
+  const m1 = new five.Motor(configs.M1);
+  const m2 = new five.Motor(configs.M2);
+});
 
 const SPEED = 128;
 const TURN_SPEED = 64;
 
-function runCommand (val) {
-  val = val.command;
-  console.log('running command:', val);
+function runCommand (msg) {
+  msg = msg.command;
   switch(val) {
-    case command.FORWARD:
-      console.log('going forward');
+    case commands.FORWARD:
       forward(SPEED);
       break;
-    case command.REVERSE:
+    case commands.REVERSE:
       reverse(SPEED);
       break;
-    case command.TURN_LEFT:
+    case commands.TURN_LEFT:
       left(TURN_SPEED);
       break;
-    case command.TURN_RIGHT:
+    case commands.TURN_RIGHT:
       right(TURN_SPEED);
       break;
-    case command.STOP:
+    case commands.STOP:
       stop();
       break;
   }
 }
 
 function forward (speed) {
-  console.log('inside forward');
   m1.fwd(speed);
   m2.fwd(speed);
 }
@@ -62,7 +66,7 @@ function stop() {
   m2.stop();
 }
 
-module.exports = { board: board, runCommand: runCommand };
+module.exports = { runCommand: runCommand };
 // var STEPS = 10;
 // var TIMESTEP = 100;
 //
