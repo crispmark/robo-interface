@@ -23,20 +23,17 @@ const io = require('socket.io')(http);
 const robo    = require('./roboJohnny');
 const command = require('./robo-commands'); // command definitions
 
-// wait until board is ready before listening on the socket
-robo.board.on('ready', function() {
-  io.on('connection', function(socket) {
-    console.log('a user connected (id:', socket.id, ')');
+io.on('connection', function(socket) {
+  console.log('a user connected (id:', socket.id, ')');
 
-    //listen for commands to robot
-    socket.on(command.COMMAND, function(msg) {
-      console.log('running command:', msg);
-      robo.runCommand(msg); // msg contains the specific command to run
-    });
-
-    socket.on('disconnect', function(){
-      console.log('a user disconnected (id:', socket.id, ')');
-      robo.runCommand(command.STOP);
-    });
+  //listen for commands to robot
+  socket.on(command.COMMAND, function(msg) {
+    console.log('running command:', msg);
+    robo.runCommand(msg); // msg contains the specific command to run
   });
-})
+
+  socket.on('disconnect', function(){
+    console.log('a user disconnected (id:', socket.id, ')');
+    robo.runCommand(command.STOP);
+  });
+});

@@ -21,6 +21,12 @@ const SPEED = 128;
 const TURN_SPEED = 64;
 
 function runCommand (msg) {
+  // don't attempt to move motors which haven't been instantiated yet
+  if (!m1 || !m2) {
+    return;
+  }
+
+  // the command itself is in the property 'command' of the socket message
   msg = msg.command;
 
   switch(msg) {
@@ -67,7 +73,7 @@ function stop() {
   m2.stop();
 }
 
-module.exports = { board: board, runCommand: runCommand };
+module.exports = { runCommand: runCommand };
 // var STEPS = 10;
 // var TIMESTEP = 100;
 //
