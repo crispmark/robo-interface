@@ -22,7 +22,8 @@ const TURN_SPEED = 64;
 
 function runCommand (msg) {
   msg = msg.command;
-  switch(val) {
+  
+  switch(msg) {
     case commands.FORWARD:
       forward(SPEED);
       break;
